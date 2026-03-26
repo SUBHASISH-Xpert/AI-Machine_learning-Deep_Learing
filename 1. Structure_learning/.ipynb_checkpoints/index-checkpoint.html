@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Learning Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a14;
+    --surface: #0d1628;
+    --border: #1a2a45;
+    --accent1: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --accent4: #10b981;
+    --accent5: #f43f5e;
+    --text: #e2eaf8;
+    --muted: #5a7090;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 60px 20px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent1);
+    border: 1px solid var(--accent1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #00e5ff 0%, #7c3aed 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: 'Space Mono', monospace;
+  }
+  .you-are-here {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid var(--accent3);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--accent3);
+    font-family: 'Space Mono', monospace;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent3); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
+
+  /* Filter tabs */
+  .filters {
+    position: relative; z-index: 2;
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center;
+    padding: 24px 20px;
+  }
+  .filter-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent1);
+    color: var(--accent1);
+    background: rgba(0,229,255,0.07);
+  }
+
+  /* Main roadmap */
+  .roadmap {
+    position: relative; z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px 20px 80px;
+  }
+
+  /* Vertical spine */
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--accent2), var(--accent1), var(--accent4), transparent);
+    transform: translateX(-50%);
+    opacity: 0.4;
+  }
+
+  .phase {
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s forwards;
+  }
+  .phase:nth-child(1){animation-delay:.1s}
+  .phase:nth-child(2){animation-delay:.2s}
+  .phase:nth-child(3){animation-delay:.3s}
+  .phase:nth-child(4){animation-delay:.4s}
+  .phase:nth-child(5){animation-delay:.5s}
+  .phase:nth-child(6){animation-delay:.6s}
+  .phase:nth-child(7){animation-delay:.7s}
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.25s;
+    user-select: none;
+  }
+  .phase-header:hover { border-color: var(--phase-color, var(--accent1)); box-shadow: 0 0 20px rgba(0,229,255,0.06); }
+  .phase-header.open { border-color: var(--phase-color, var(--accent1)); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+  .phase-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--phase-color, var(--accent1));
+    color: #000;
+    flex-shrink: 0;
+  }
+  .phase-info { flex: 1; }
+  .phase-title { font-size: 1.05rem; font-weight: 800; }
+  .phase-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .phase-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--phase-color, var(--accent1));
+    color: var(--phase-color, var(--accent1));
+  }
+  .chevron {
+    width: 18px; height: 18px;
+    color: var(--muted);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .phase-header.open .chevron { transform: rotate(180deg); }
+
+  .phase-body {
+    display: none;
+    background: rgba(13,22,40,0.8);
+    border: 1px solid var(--phase-color, var(--accent1));
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 20px;
+  }
+  .phase-body.open { display: block; }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .topic-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .topic-card:hover { border-color: var(--phase-color, var(--accent1)); transform: translateY(-2px); }
+  .topic-icon { font-size: 1.4rem; margin-bottom: 8px; }
+  .topic-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+  .topic-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.4; font-family: 'Space Mono', monospace; }
+
+  .you-are-here-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(245,158,11,0.08);
+    border: 1px dashed var(--accent3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: var(--accent3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .tools-row {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 12px;
+  }
+  .tool-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 6px;
+    color: #a78bfa;
+  }
+
+  /* Progress bar */
+  .progress-section {
+    max-width: 960px; margin: 0 auto 0;
+    padding: 0 20px;
+    position: relative; z-index: 2;
+  }
+  .progress-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: flex; justify-content: space-between;
+  }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent1)); border-radius: 2px; transition: width 0.5s; }
+
+  @media(max-width:600px){
+    .roadmap::before { left: 20px; }
+    .topics-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">✦ COMPLETE AI ROADMAP 2025</div>
+  <h1>Your AI Learning<br>Journey</h1>
+  <p class="subtitle">// from EDA → Full Stack AI Engineer</p>
+  <div class="you-are-here"><span class="dot"></span> YOU ARE HERE → Phase 2: EDA & Statistics</div>
+</header>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filterPhases('all', this)">ALL PHASES</button>
+  <button class="filter-btn" onclick="filterPhases('foundation', this)">FOUNDATION</button>
+  <button class="filter-btn" onclick="filterPhases('ml', this)">MACHINE LEARNING</button>
+  <button class="filter-btn" onclick="filterPhases('dl', this)">DEEP LEARNING</button>
+  <button class="filter-btn" onclick="filterPhases('advanced', this)">ADVANCED AI</button>
+</div>
+
+<div class="progress-section">
+  <div class="progress-label"><span>Overall Progress</span><span>~20% complete</span></div>
+  <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+</div>
+
+<div class="roadmap" id="roadmap">
+
+  <!-- Phase 1 -->
+  <div class="phase" data-category="foundation">
+    <div class="phase-header" style="--phase-color:#10b981" onclick="toggle(this)">
+      <div class="phase-num" style="background:#10b981">01</div>
+      <div class="phase-info">
+        <div class="phase-title">Mathematics & Programming Foundations</div>
+        <div class="phase-meta">// Pre-requisites · 4–6 weeks</div>
+      </div>
+      <span class="phase-badge" style="border-color:#10b981;color:#10b981">FOUNDATION</span>
+      <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div class="phase-body" style="--phase-color:#10b981">
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-icon">📐</div><div class="topic-name">Linear Algebra</div><div class="topic-desc">Vectors, matrices, eigenvalues, SVD — the backbone of ML models</div></div>
+        <div class="topic-card"><div class="topic-icon">📊</div><div class="topic-name">Calculus</div><div class="topic-desc">Derivatives, gradients, chain rule — essential for backpropagation</div></div>
+        <div class="topic-card"><div class="topic-icon">🎲</div><div class="topic-name">Probability & Statistics</div><div class="topic-desc">Distributions, Bayes theorem, hypothesis testing</div></div>
+        <div class="topic-card"><div class="topic-icon">🐍</div><div class="topic-name">Python for AI</div><div class="topic-desc">NumPy, Pandas, Matplotlib — data manipulation & visualization</div></div>
+      </div>
+      <div class="tools-row">
+        <span class="tool-chip">Python</span><span class="tool-chip">NumPy</span><span class="tool-chip">Pandas</span><span class="tool-chip">Matplotlib</span><span class="tool-chip">Jupyter</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 — YOU ARE HERE -->
+  <div class="phase" data-category="foundation">
+    <div class="phase-header open" style="--phase-color:#f59e0b" onclick="toggle(this)">
+      <div class="phase-num" style="background:#f59e0b">02</div>
+      <div class="phase-info">
+        <div class="phase-title">EDA — Exploratory Data Analysis</div>
+        <div class="phase-meta">// Data Understanding · 3–4 weeks</div>
+      </div>
+      <span class="phase-badge" style="border-color:#f59e0b;color:#f59e0b">YOU ARE HERE</span>
+      <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div class="phase-body open" style="--phase-color:#f59e0b">
+      <div class="you-are-here-banner">📍 You are currently here! Master this phase before moving forward.</div>
+      <div class="topics-grid" style="margin-top:14px">
+        <div class="topic-card"><div class="topic-icon">🔍</div><div class="topic-name">Data Collection & Cleaning</div><div class="topic-desc">Handling nulls, duplicates, outliers, data types</div></div>
+        <div class="topic-card"><div class="topic-icon">📈</div><div class="topic-name">Univariate Analysis</div><div class="topic-desc">Distributions, histograms, box plots, skewness</div></div>
+        <div class="topic-card"><div class="topic-icon">🔗</div><div class="topic-name">Bivariate & Multivariate</div><div class="topic-desc">Correlation, scatter plots, heatmaps, pair plots</div></div>
+        <div class="topic-card"><div class="topic-icon">🧹</div><div class="topic-name">Feature Engineering</div><div class="topic-desc">Encoding, scaling, transformation, new feature creation</div></div>
+        <div class="topic-card"><div class="topic-icon">📉</div><div class="topic-name">Dimensionality Reduction</div><div class="topic-desc">PCA, t-SNE, UMAP for visualization & compression</div></div>
+        <div class="topic-card"><div class="topic-icon">📊</div><div class="topic-name">Data Visualization</div><div class="topic-desc">Seaborn, Plotly, storytelling with data</div></div>
+      </div>
+      <div class="tools-row">
+        <span class="tool-chip">Pandas</span><span class="tool-chip">Seaborn</span><span class="tool-chip">Plotly</span><span class="tool-chip">Missingno</span><span class="tool-chip">Scipy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase" data-category="ml">
+    <div class="phase-header" style="--phase-color:#00e5ff" onclick="toggle(this)">
+      <div class="phase-num" style="background:#00e5ff">03</div>
+      <div class="phase-info">
+        <div class="phase-title">Classical Machine Learning</div>
+        <div class="phase-meta">// Supervised & Unsupervised · 6–8 weeks</div>
+      </div>
+      <span class="phase-badge" style="border-color:#00e5ff;color:#00e5ff">MACHINE LEARNING</span>
+      <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div class="phase-body" style="--phase-color:#00e5ff">
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-icon">📏</div><div class="topic-name">Linear & Logistic Regression</div><div class="topic-desc">Prediction, classification, gradient descent</div></div>
+        <div class="topic-card"><div class="topic-icon">🌳</div><div class="topic-name">Decision Trees & Random Forest</div><div class="topic-desc">Ensemble methods, bagging, boosting</div></div>
+        <div class="topic-card"><div class="topic-icon">⚡</div><div class="topic-name">SVM & KNN</div><div class="topic-desc">Support vectors, hyperplanes, k-nearest neighbors</div></div>
+        <div class="topic-card"><div class="topic-icon">🚀</div><div class="topic-name">XGBoost / LightGBM</div><div class="topic-desc">Gradient boosting — Kaggle winning algorithms</div></div>
+        <div class="topic-card"><div class="topic-icon">🔵</div><div class="topic-name">Clustering (K-Means, DBSCAN)</div><div class="topic-desc">Unsupervised grouping, anomaly detection</div></div>
+        <div class="topic-card"><div class="topic-icon">🧪</div><div class="topic-name">Model Evaluation</div><div class="topic-desc">Cross-validation, confusion matrix, ROC-AUC, F1</div></div>
+      </div>
+      <div class="tools-row">
+        <span class="tool-chip">Scikit-learn</span><span class="tool-chip">XGBoost</span><span class="tool-chip">LightGBM</span><span class="tool-chip">CatBoost</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase" data-category="dl">
+    <div class="phase-header" style="--phase-color:#7c3aed" onclick="toggle(this)">
+      <div class="phase-num" style="background:#7c3aed">04</div>
+      <div class="phase-info">
+        <div class="phase-title">Deep Learning & Neural Networks</div>
+        <div class="phase-meta">// Neural Architectures · 8–10 weeks</div>
+      </div>
+      <span class="phase-badge" style="border-color:#7c3aed;color:#7c3aed">DEEP LEARNING</span>
+      <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div class="phase-body" style="--phase-color:#7c3aed">
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-icon">🧠</div><div class="topic-name">ANN — Artificial Neural Networks</div><div class="topic-desc">Perceptrons, activation functions, backpropagation</div></div>
+        <div class="topic-card"><div class="topic-icon">🖼️</div><div class="topic-name">CNN — Computer Vision</div><div class="topic-desc">Convolutions, pooling, image classification, object detection</div></div>
+        <div class="topic-card"><div class="topic-icon">🔄</div><div class="topic-name">RNN / LSTM / GRU</div><div class="topic-desc">Sequence modeling, time series, vanishing gradient</div></div>
+        <div class="topic-card"><div class="topic-icon">⚙️</div><div class="topic-name">Optimizers & Regularization</div><div class="topic-desc">Adam, dropout, batch normalization, learning rate scheduling</div></div>
+        <div class="topic-card"><div class="topic-icon">🏗️</div><div class="topic-name">Transfer Learning</div><div class="topic-desc">Fine-tuning ResNet, VGG, EfficientNet on custom data</div></div>
+        <div class="topic-card"><div class="topic-icon">🎨</div><div class="topic-name">GANs — Generative Models</div><div class="topic-desc">Generator vs Discriminator, image synthesis</div></div>
+      </div>
+      <div class="tools-row">
+        <span class="tool-chip">TensorFlow</span><span class="tool-chip">PyTorch</span><span class="tool-chip">Keras</span><span class="tool-chip">OpenCV</span><span class="tool-chip">CUDA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase" data-category="advanced">
+    <div class="phase-header" style="--phase-color:#f43f5e" onclick="toggle(this)">
+      <div class="phase-num" style="background:#f43f5e">05</div>
+      <div class="phase-info">
+        <div class="phase-title">NLP & Large Language Models</div>
+        <div class="phase-meta">// Language AI · 6–8 weeks</div>
+      </div>
+      <span class="phase-badge" style="border-color:#f43f5e;color:#f43f5e">ADVANCED AI</span>
+      <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div class="phase-body" style="--phase-color:#f43f5e">
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-icon">📝</div><div class="topic-name">Text Preprocessing</div><div class="topic-desc">Tokenization, stemming, lemmatization, TF-IDF, BOW</div></div>
+        <div class="topic-card"><div class="topic-icon">🔢</div><div class="topic-name">Word Embeddings</div><div class="topic-desc">Word2Vec, GloVe, FastText, semantic similarity</div></div>
+        <div class="topic-card"><div class="topic-icon">🤖</div><div class="topic-name">Transformer Architecture</div><div class="topic-desc">Self-attention, multi-head attention, positional encoding</div></div>
+        <div class="topic-card"><div class="topic-icon">🦾</div><div class="topic-name">BERT & GPT Models</div><div class="topic-desc">Pre-training, fine-tuning, prompt engineering</div></div>
+        <div class="topic-card"><div class="topic-icon">🔗</div><div class="topic-name">RAG — Retrieval Augmented</div><div class="topic-desc">Vector databases, embeddings, LLM + knowledge base</div></div>
+        <div class="topic-card"><div class="topic-icon">🎯</div><div class="topic-name">Fine-tuning LLMs</div><div class="topic-desc">LoRA, QLoRA, instruction tuning, RLHF</div></div>
+      </div>
+      <div class="tools-row">
+        <span class="tool-chip">HuggingFace</span><span class="tool-chip">LangChain</span><span class="tool-chip">NLTK</span><span class="tool-chip">SpaCy</span><span class="tool-chip">Pinecone</span><span class="tool-chip">OpenAI API</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 6 -->
+  <div class="phase" data-category="advanced">
+    <div class="phase-header" style="--phase-color:#06b6d4" onclick="toggle(this)">
+      <div class="phase-num" style="background:#06b6d4">06</div>
+      <div class="phase-info">
+        <div class="phase-title">Reinforcement Learning & Advanced Topics</div>
+        <div class="phase-meta">// RL, AutoML, Ethics · 6–8 weeks</div>
+      </div>
+      <span class="phase-badge" style="border-color:#06b6d4;color:#06b6d4">ADVANCED AI</span>
+      <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div class="phase-body" style="--phase-color:#06b6d4">
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-icon">🎮</div><div class="topic-name">RL Fundamentals</div><div class="topic-desc">Agents, rewards, policies, Q-learning, Markov Decision Process</div></div>
+        <div class="topic-card"><div class="topic-icon">🕹️</div><div class="topic-name">Deep RL (DQN, PPO)</div><div class="topic-desc">Deep Q-Networks, policy gradient, Actor-Critic</div></div>
+        <div class="topic-card"><div class="topic-icon">🔬</div><div class="topic-name">AutoML & Hyperparameter Tuning</div><div class="topic-desc">Optuna, Bayesian optimization, neural architecture search</div></div>
+        <div class="topic-card"><div class="topic-icon">🌊</div><div class="topic-name">Diffusion Models</div><div class="topic-desc">Stable Diffusion, DALL-E, image generation fundamentals</div></div>
+        <div class="topic-card"><div class="topic-icon">⚖️</div><div class="topic-name">AI Ethics & Safety</div><div class="topic-desc">Bias, fairness, explainability (SHAP, LIME), responsible AI</div></div>
+        <div class="topic-card"><div class="topic-icon">🔭</div><div class="topic-name">Multimodal AI</div><div class="topic-desc">Vision-language models, CLIP, GPT-4V, audio + text</div></div>
+      </div>
+      <div class="tools-row">
+        <span class="tool-chip">OpenAI Gym</span><span class="tool-chip">Stable-Baselines3</span><span class="tool-chip">Optuna</span><span class="tool-chip">SHAP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 7 -->
+  <div class="phase" data-category="advanced">
+    <div class="phase-header" style="--phase-color:#a3e635" onclick="toggle(this)">
+      <div class="phase-num" style="background:#a3e635">07</div>
+      <div class="phase-info">
+        <div class="phase-title">MLOps & AI Deployment</div>
+        <div class="phase-meta">// Production AI · 4–6 weeks</div>
+      </div>
+      <span class="phase-badge" style="border-color:#a3e635;color:#a3e635">PRODUCTION</span>
+      <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div class="phase-body" style="--phase-color:#a3e635">
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-icon">🐳</div><div class="topic-name">Docker & Kubernetes</div><div class="topic-desc">Containerize models, orchestrate deployments at scale</div></div>
+        <div class="topic-card"><div class="topic-icon">☁️</div><div class="topic-name">Cloud AI (AWS/GCP/Azure)</div><div class="topic-desc">SageMaker, Vertex AI, managed ML services</div></div>
+        <div class="topic-card"><div class="topic-icon">🔁</div><div class="topic-name">CI/CD for ML Pipelines</div><div class="topic-desc">MLflow, DVC, model versioning, experiment tracking</div></div>
+        <div class="topic-card"><div class="topic-icon">🌐</div><div class="topic-name">Model Serving APIs</div><div class="topic-desc">FastAPI, Flask, REST endpoints, latency optimization</div></div>
+        <div class="topic-card"><div class="topic-icon">📡</div><div class="topic-name">Model Monitoring</div><div class="topic-desc">Data drift, model drift, logging, alerts in production</div></div>
+        <div class="topic-card"><div class="topic-icon">🏆</div><div class="topic-name">AI System Design</div><div class="topic-desc">End-to-end AI product design, scalable architecture</div></div>
+      </div>
+      <div class="tools-row">
+        <span class="tool-chip">MLflow</span><span class="tool-chip">FastAPI</span><span class="tool-chip">Docker</span><span class="tool-chip">AWS SageMaker</span><span class="tool-chip">DVC</span><span class="tool-chip">Weights & Biases</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+function filterPhases(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.phase').forEach(p => {
+    if (cat === 'all' || p.dataset.category === cat) {
+      p.style.display = '';
+    } else {
+      p.style.display = 'none';
+    }
+  });
+}
+
+// Open phase 2 by default
+document.querySelector('.phase:nth-child(2) .phase-header').classList.add('open');
+document.querySelector('.phase:nth-child(2) .phase-body').classList.add('open');
+</script>
+</body>
+</html>
