@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning Algorithms — Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent1: #7c3aed;
+    --accent2: #06b6d4;
+    --accent3: #f59e0b;
+    --accent4: #10b981;
+    --accent5: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --heading: #f8fafc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    padding: 80px 40px 60px;
+    text-align: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,.18) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(6,182,212,.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 800;
+    color: var(--heading);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  h1 span { color: var(--accent1); }
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── NAV PILLS ── */
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 28px 40px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,15,.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .nav a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .06em;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .nav a:hover { border-color: var(--accent1); color: var(--accent1); background: rgba(124,58,237,.08); }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 60px 30px 100px; }
+
+  /* ── SECTION HEADER ── */
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── ALGO CARD ── */
+  .algo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    transition: border-color .25s, transform .2s;
+    scroll-margin-top: 80px;
+  }
+  .algo-card:hover { border-color: #2d2d44; transform: translateY(-2px); }
+
+  .card-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .algo-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    opacity: .12;
+    line-height: 1;
+  }
+  .algo-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--heading);
+    line-height: 1.2;
+  }
+  .algo-title small {
+    display: block;
+    font-size: .8rem;
+    font-weight: 400;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: .04em;
+  }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .66rem;
+    letter-spacing: .06em;
+    padding: 5px 12px;
+    border-radius: 99px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .card-body { padding: 28px 32px; display: grid; gap: 28px; }
+
+  /* ── USE WHEN ROW ── */
+  .use-when {
+    background: rgba(255,255,255,.025);
+    border-left: 3px solid var(--accent1);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    font-size: .92rem;
+    color: var(--text);
+  }
+  .use-when strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    display: block;
+    color: var(--accent1);
+    margin-bottom: 6px;
+  }
+
+  /* ── STEPS ── */
+  .steps-title {
+    font-family: 'Syne', sans-serif;
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 44px;
+    flex-shrink: 0;
+  }
+  .step-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .7rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .step-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin: 2px 0;
+    min-height: 12px;
+  }
+  .step:last-child .step-line { display: none; }
+  .step-content {
+    padding: 2px 0 20px 14px;
+    font-size: .93rem;
+  }
+  .step-content strong {
+    font-family: 'Syne', sans-serif;
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--heading);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .step-content span { color: var(--muted); font-size: .88rem; }
+
+  /* ── TAGS ROW ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .67rem;
+    letter-spacing: .05em;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .comparison {
+    margin-top: 60px;
+    overflow-x: auto;
+  }
+  .comparison h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+  }
+  thead tr { background: rgba(124,58,237,.12); }
+  th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+  tbody tr:hover td { background: rgba(255,255,255,.02); }
+  td:first-child { font-family: 'Syne', sans-serif; font-weight: 600; color: var(--heading); }
+
+  /* color themes per algo */
+  .c1 { color: #7c3aed; border-color: #7c3aed; }
+  .c2 { color: #06b6d4; border-color: #06b6d4; }
+  .c3 { color: #f59e0b; border-color: #f59e0b; }
+  .c4 { color: #10b981; border-color: #10b981; }
+  .c5 { color: #ef4444; border-color: #ef4444; }
+  .c6 { color: #ec4899; border-color: #ec4899; }
+  .c7 { color: #8b5cf6; border-color: #8b5cf6; }
+
+  .dot1 { background: rgba(124,58,237,.2); color: #7c3aed; }
+  .dot2 { background: rgba(6,182,212,.2); color: #06b6d4; }
+  .dot3 { background: rgba(245,158,11,.2); color: #f59e0b; }
+  .dot4 { background: rgba(16,185,129,.2); color: #10b981; }
+  .dot5 { background: rgba(239,68,68,.2); color: #ef4444; }
+  .dot6 { background: rgba(236,72,153,.2); color: #ec4899; }
+  .dot7 { background: rgba(139,92,246,.2); color: #8b5cf6; }
+
+  .bl1 { border-left-color: #7c3aed; }
+  .bl2 { border-left-color: #06b6d4; }
+  .bl3 { border-left-color: #f59e0b; }
+  .bl4 { border-left-color: #10b981; }
+  .bl5 { border-left-color: #ef4444; }
+  .bl6 { border-left-color: #ec4899; }
+  .bl7 { border-left-color: #8b5cf6; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem;
+    color: var(--muted);
+    letter-spacing: .06em;
+  }
+
+  @media (max-width: 600px) {
+    .card-header { grid-template-columns: 1fr auto; }
+    .algo-number { display: none; }
+    .card-body { padding: 20px; }
+    .card-header { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="label">// Complete Reference Guide</p>
+  <h1>Machine <span>Learning</span><br>Algorithms</h1>
+  <p class="subtitle">Step-by-step process, real-world use cases, and when to choose each algorithm — explained clearly.</p>
+</header>
+
+<nav class="nav">
+  <a href="#lr">Linear Regression</a>
+  <a href="#logr">Logistic Regression</a>
+  <a href="#dt">Decision Tree</a>
+  <a href="#rf">Random Forest</a>
+  <a href="#svm">SVM</a>
+  <a href="#knn">KNN</a>
+  <a href="#kmeans">K-Means</a>
+  <a href="#table">Compare All</a>
+</nav>
+
+<main>
+
+<!-- ────────── 1. LINEAR REGRESSION ────────── -->
+<p class="section-label">Supervised · Regression</p>
+<article class="algo-card" id="lr">
+  <div class="card-header">
+    <span class="algo-number">01</span>
+    <div class="algo-title">
+      Linear Regression
+      <small>Predicts a continuous numeric output</small>
+    </div>
+    <span class="badge c1">Supervised</span>
+  </div>
+  <div class="card-body">
+    <div class="use-when bl1">
+      <strong>⚡ Use When</strong>
+      You need to predict a <em>numeric value</em> (price, temperature, sales) and the relationship between input and output is roughly linear. Best when data is clean, features are numeric, and you need an interpretable model quickly.
+    </div>
+
+    <div>
+      <p class="steps-title">Step-by-Step Process</p>
+      <div class="steps">
+        <div class="step"><div class="step-left"><div class="step-dot dot1">1</div><div class="step-line"></div></div><div class="step-content"><strong>Collect & Explore Data</strong><span>Gather dataset with input features (X) and a numeric target (y). Check for nulls, outliers, and distribution.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot1">2</div><div class="step-line"></div></div><div class="step-content"><strong>Feature Selection & Engineering</strong><span>Choose relevant features. Normalize/scale values. Remove highly correlated redundant features.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot1">3</div><div class="step-line"></div></div><div class="step-content"><strong>Split Data</strong><span>Divide into training set (80%) and test set (20%) to evaluate generalization.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot1">4</div><div class="step-line"></div></div><div class="step-content"><strong>Fit the Model</strong><span>Model learns the best-fit line: <code>y = mx + b</code> by minimizing Mean Squared Error (MSE) using Ordinary Least Squares or Gradient Descent.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot1">5</div><div class="step-line"></div></div><div class="step-content"><strong>Evaluate</strong><span>Use R² score, MAE, and RMSE to measure accuracy. Check residual plots.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot1">6</div><div class="step-line"></div></div><div class="step-content"><strong>Predict</strong><span>Feed new input features → get a continuous numeric prediction.</span></div></div>
+      </div>
+    </div>
+
+    <div>
+      <p class="steps-title">Real-World Use Cases</p>
+      <div class="tags">
+        <span class="tag">🏠 House price prediction</span>
+        <span class="tag">📈 Stock price forecasting</span>
+        <span class="tag">🌡️ Weather temperature</span>
+        <span class="tag">💰 Salary estimation</span>
+        <span class="tag">⚡ Energy consumption</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ────────── 2. LOGISTIC REGRESSION ────────── -->
+<p class="section-label">Supervised · Classification</p>
+<article class="algo-card" id="logr">
+  <div class="card-header">
+    <span class="algo-number">02</span>
+    <div class="algo-title">
+      Logistic Regression
+      <small>Classifies into two or more categories</small>
+    </div>
+    <span class="badge c2">Classification</span>
+  </div>
+  <div class="card-body">
+    <div class="use-when bl2">
+      <strong>⚡ Use When</strong>
+      You want to predict a <em>category/class</em> (Yes/No, Spam/Not Spam). Great as a baseline classifier when data is linearly separable and you need probability scores alongside predictions.
+    </div>
+    <div>
+      <p class="steps-title">Step-by-Step Process</p>
+      <div class="steps">
+        <div class="step"><div class="step-left"><div class="step-dot dot2">1</div><div class="step-line"></div></div><div class="step-content"><strong>Prepare Data</strong><span>Label encode target classes. Handle class imbalance (SMOTE or class weights).</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot2">2</div><div class="step-line"></div></div><div class="step-content"><strong>Feature Scaling</strong><span>Standardize features (mean=0, std=1) — logistic regression is sensitive to scale.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot2">3</div><div class="step-line"></div></div><div class="step-content"><strong>Train the Model</strong><span>Sigmoid function maps linear output to probability (0–1). Uses Maximum Likelihood Estimation to find optimal weights.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot2">4</div><div class="step-line"></div></div><div class="step-content"><strong>Set Decision Threshold</strong><span>Default is 0.5: P ≥ 0.5 → Class 1, else Class 0. Tune threshold for precision/recall tradeoff.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot2">5</div><div class="step-line"></div></div><div class="step-content"><strong>Evaluate</strong><span>Use Accuracy, Precision, Recall, F1 Score, ROC-AUC curve.</span></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="steps-title">Real-World Use Cases</p>
+      <div class="tags">
+        <span class="tag">📧 Spam detection</span>
+        <span class="tag">🏥 Disease diagnosis (cancer yes/no)</span>
+        <span class="tag">💳 Fraud detection</span>
+        <span class="tag">🎓 Pass/Fail prediction</span>
+        <span class="tag">📊 Customer churn</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ────────── 3. DECISION TREE ────────── -->
+<p class="section-label">Supervised · Classification & Regression</p>
+<article class="algo-card" id="dt">
+  <div class="card-header">
+    <span class="algo-number">03</span>
+    <div class="algo-title">
+      Decision Tree
+      <small>Splits data using if-then rules in a tree structure</small>
+    </div>
+    <span class="badge c3">Interpretable</span>
+  </div>
+  <div class="card-body">
+    <div class="use-when bl3">
+      <strong>⚡ Use When</strong>
+      You need a <em>visual, explainable</em> model. Works with both numeric and categorical data, requires minimal preprocessing, and handles non-linear relationships naturally. Ideal for stakeholder-facing models.
+    </div>
+    <div>
+      <p class="steps-title">Step-by-Step Process</p>
+      <div class="steps">
+        <div class="step"><div class="step-left"><div class="step-dot dot3">1</div><div class="step-line"></div></div><div class="step-content"><strong>Select Root Feature</strong><span>Algorithm tries every feature and threshold. Picks the one that gives the best split — maximizing Information Gain (for classification) or minimizing MSE (for regression).</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot3">2</div><div class="step-line"></div></div><div class="step-content"><strong>Recursive Splitting</strong><span>Each branch repeats the same process — best split feature is chosen at every node until stop criteria is met.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot3">3</div><div class="step-line"></div></div><div class="step-content"><strong>Stop Condition</strong><span>Stop when: max depth reached, min samples in leaf, or no further info gain. This prevents overfitting.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot3">4</div><div class="step-line"></div></div><div class="step-content"><strong>Pruning (Optional)</strong><span>Post-pruning removes branches that offer little predictive power, improving generalization.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot3">5</div><div class="step-line"></div></div><div class="step-content"><strong>Predict</strong><span>New data travels from root to leaf by following feature conditions. Leaf node gives the prediction.</span></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="steps-title">Real-World Use Cases</p>
+      <div class="tags">
+        <span class="tag">🏦 Loan approval</span>
+        <span class="tag">🩺 Medical diagnosis</span>
+        <span class="tag">🛒 Customer segmentation</span>
+        <span class="tag">⚙️ Fault diagnosis</span>
+        <span class="tag">📋 HR decision making</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ────────── 4. RANDOM FOREST ────────── -->
+<p class="section-label">Ensemble · Classification & Regression</p>
+<article class="algo-card" id="rf">
+  <div class="card-header">
+    <span class="algo-number">04</span>
+    <div class="algo-title">
+      Random Forest
+      <small>Combines many decision trees via bagging</small>
+    </div>
+    <span class="badge c4">Ensemble</span>
+  </div>
+  <div class="card-body">
+    <div class="use-when bl4">
+      <strong>⚡ Use When</strong>
+      You need <em>high accuracy</em> and robustness on tabular data. Handles missing values, outliers, and high-dimensional data well. A go-to algorithm when a single decision tree overfits. Great for medium-to-large datasets.
+    </div>
+    <div>
+      <p class="steps-title">Step-by-Step Process</p>
+      <div class="steps">
+        <div class="step"><div class="step-left"><div class="step-dot dot4">1</div><div class="step-line"></div></div><div class="step-content"><strong>Bootstrap Sampling</strong><span>Randomly sample the training data <em>with replacement</em> N times to create N different datasets (one per tree).</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot4">2</div><div class="step-line"></div></div><div class="step-content"><strong>Build N Decision Trees</strong><span>Train each tree on its bootstrapped dataset. At each split, only a random subset of features is considered (prevents trees being too similar).</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot4">3</div><div class="step-line"></div></div><div class="step-content"><strong>Aggregate Predictions</strong><span>Classification → majority vote across all trees. Regression → average output of all trees.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot4">4</div><div class="step-line"></div></div><div class="step-content"><strong>Feature Importance</strong><span>Measure how much each feature reduces impurity across all trees — great for feature selection.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot4">5</div><div class="step-line"></div></div><div class="step-content"><strong>Tune Hyperparameters</strong><span>Key params: n_estimators (more = better but slower), max_depth, min_samples_split.</span></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="steps-title">Real-World Use Cases</p>
+      <div class="tags">
+        <span class="tag">💊 Drug discovery</span>
+        <span class="tag">🏦 Credit scoring</span>
+        <span class="tag">🌾 Crop yield prediction</span>
+        <span class="tag">🔐 Intrusion detection</span>
+        <span class="tag">🛍️ Recommendation systems</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ────────── 5. SVM ────────── -->
+<p class="section-label">Supervised · Classification & Regression</p>
+<article class="algo-card" id="svm">
+  <div class="card-header">
+    <span class="algo-number">05</span>
+    <div class="algo-title">
+      Support Vector Machine (SVM)
+      <small>Finds the optimal hyperplane that separates classes</small>
+    </div>
+    <span class="badge c5">High-Dimensional</span>
+  </div>
+  <div class="card-body">
+    <div class="use-when bl5">
+      <strong>⚡ Use When</strong>
+      Data has <em>many features relative to samples</em> (e.g. text classification, image data). Excellent when classes are clearly separable. Works well for small-to-medium high-dimensional datasets. Not ideal for very large datasets (slow training).
+    </div>
+    <div>
+      <p class="steps-title">Step-by-Step Process</p>
+      <div class="steps">
+        <div class="step"><div class="step-left"><div class="step-dot dot5">1</div><div class="step-line"></div></div><div class="step-content"><strong>Feature Scaling</strong><span>SVM is sensitive to scale. Standardize all features to the same range first.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot5">2</div><div class="step-line"></div></div><div class="step-content"><strong>Choose Kernel</strong><span>Linear kernel for linearly separable data. RBF (Radial Basis Function) for non-linear data. Polynomial for curved boundaries.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot5">3</div><div class="step-line"></div></div><div class="step-content"><strong>Find Maximum-Margin Hyperplane</strong><span>SVM finds the decision boundary that maximizes the margin (gap) between the two classes. Points on the margin are "support vectors."</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot5">4</div><div class="step-line"></div></div><div class="step-content"><strong>Soft Margin (C parameter)</strong><span>C controls the tradeoff: high C → fewer misclassifications but narrow margin. Low C → wider margin but allows some misclassification.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot5">5</div><div class="step-line"></div></div><div class="step-content"><strong>Evaluate & Predict</strong><span>Which side of the hyperplane a new point falls on determines its class.</span></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="steps-title">Real-World Use Cases</p>
+      <div class="tags">
+        <span class="tag">📝 Text classification (NLP)</span>
+        <span class="tag">🖼️ Image recognition</span>
+        <span class="tag">🧬 Bioinformatics</span>
+        <span class="tag">🤚 Handwriting recognition</span>
+        <span class="tag">📡 Face detection</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ────────── 6. KNN ────────── -->
+<p class="section-label">Supervised · Instance-Based</p>
+<article class="algo-card" id="knn">
+  <div class="card-header">
+    <span class="algo-number">06</span>
+    <div class="algo-title">
+      K-Nearest Neighbors (KNN)
+      <small>Classifies based on the K closest data points</small>
+    </div>
+    <span class="badge c6">Lazy Learner</span>
+  </div>
+  <div class="card-body">
+    <div class="use-when bl6">
+      <strong>⚡ Use When</strong>
+      Dataset is <em>small to medium</em>, patterns are local, and you want a simple non-parametric approach. No training phase — all computation is at prediction time. Best when feature space is low-dimensional.
+    </div>
+    <div>
+      <p class="steps-title">Step-by-Step Process</p>
+      <div class="steps">
+        <div class="step"><div class="step-left"><div class="step-dot dot6">1</div><div class="step-line"></div></div><div class="step-content"><strong>Choose K value</strong><span>K = number of neighbors to consider. Odd K avoids ties. Use cross-validation to pick the best K.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot6">2</div><div class="step-line"></div></div><div class="step-content"><strong>Normalize Features</strong><span>KNN uses distance (Euclidean, Manhattan). Features must be on the same scale or one dominates.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot6">3</div><div class="step-line"></div></div><div class="step-content"><strong>Store All Training Data</strong><span>KNN is a "lazy learner" — no model is built. All training data is stored and used at prediction time.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot6">4</div><div class="step-line"></div></div><div class="step-content"><strong>Compute Distances</strong><span>For a new data point, calculate its distance to every training point.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot6">5</div><div class="step-line"></div></div><div class="step-content"><strong>Vote & Predict</strong><span>Pick K nearest neighbors. Classification → majority class wins. Regression → average their values.</span></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="steps-title">Real-World Use Cases</p>
+      <div class="tags">
+        <span class="tag">🎬 Movie recommendation</span>
+        <span class="tag">🛒 Product recommendation</span>
+        <span class="tag">🩺 Medical pattern matching</span>
+        <span class="tag">🖼️ Image similarity search</span>
+        <span class="tag">📍 Location-based services</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ────────── 7. K-MEANS ────────── -->
+<p class="section-label">Unsupervised · Clustering</p>
+<article class="algo-card" id="kmeans">
+  <div class="card-header">
+    <span class="algo-number">07</span>
+    <div class="algo-title">
+      K-Means Clustering
+      <small>Groups data into K natural clusters without labels</small>
+    </div>
+    <span class="badge c7">Unsupervised</span>
+  </div>
+  <div class="card-body">
+    <div class="use-when bl7">
+      <strong>⚡ Use When</strong>
+      You have <em>unlabeled data</em> and want to discover hidden groupings or patterns. Useful for customer segmentation, data compression, and anomaly detection. Works best when clusters are spherical and roughly equal-sized.
+    </div>
+    <div>
+      <p class="steps-title">Step-by-Step Process</p>
+      <div class="steps">
+        <div class="step"><div class="step-left"><div class="step-dot dot7">1</div><div class="step-line"></div></div><div class="step-content"><strong>Choose K (number of clusters)</strong><span>Use the Elbow Method: plot WCSS vs K and pick the "elbow" where adding more clusters gives diminishing returns.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot7">2</div><div class="step-line"></div></div><div class="step-content"><strong>Initialize Centroids</strong><span>Randomly place K centroids in the feature space. K-Means++ initialization improves convergence speed and quality.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot7">3</div><div class="step-line"></div></div><div class="step-content"><strong>Assign Points to Nearest Centroid</strong><span>Each data point is assigned to the cluster whose centroid is closest (by Euclidean distance).</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot7">4</div><div class="step-line"></div></div><div class="step-content"><strong>Recalculate Centroids</strong><span>For each cluster, compute the mean of all assigned points — this becomes the new centroid.</span></div></div>
+        <div class="step"><div class="step-left"><div class="step-dot dot7">5</div><div class="step-line"></div></div><div class="step-content"><strong>Repeat Until Convergence</strong><span>Steps 3–4 repeat until centroids stop moving or a max iteration limit is reached.</span></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="steps-title">Real-World Use Cases</p>
+      <div class="tags">
+        <span class="tag">👥 Customer segmentation</span>
+        <span class="tag">🗺️ Geo-location clustering</span>
+        <span class="tag">🖼️ Image compression</span>
+        <span class="tag">📰 Document grouping</span>
+        <span class="tag">🔎 Anomaly detection</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ────────── COMPARISON TABLE ────────── -->
+<div class="comparison" id="table">
+  <h2>Quick Comparison Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Algorithm</th>
+        <th>Type</th>
+        <th>Output</th>
+        <th>Best For</th>
+        <th>Weakness</th>
+        <th>Complexity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Linear Regression</td><td>Supervised</td><td>Continuous number</td><td>Numeric prediction with linear trends</td><td>Fails on non-linear data</td><td>Low</td></tr>
+      <tr><td>Logistic Regression</td><td>Supervised</td><td>Class probabilities</td><td>Binary / multi-class with probability</td><td>Assumes linear decision boundary</td><td>Low</td></tr>
+      <tr><td>Decision Tree</td><td>Supervised</td><td>Class or value</td><td>Explainable, mixed data types</td><td>Overfits easily</td><td>Medium</td></tr>
+      <tr><td>Random Forest</td><td>Ensemble</td><td>Class or value</td><td>High accuracy on tabular data</td><td>Slow on very large data</td><td>Medium</td></tr>
+      <tr><td>SVM</td><td>Supervised</td><td>Class</td><td>High-dimensional, small datasets</td><td>Slow training on big data</td><td>High</td></tr>
+      <tr><td>KNN</td><td>Supervised</td><td>Class or value</td><td>Small datasets, local patterns</td><td>Very slow prediction on big data</td><td>Low</td></tr>
+      <tr><td>K-Means</td><td>Unsupervised</td><td>Cluster labels</td><td>Discovering hidden groups</td><td>Must know K in advance</td><td>Medium</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+
+<footer>
+  Machine Learning Algorithms Reference · Supervised · Unsupervised · Ensemble
+</footer>
+
+</body>
+</html>

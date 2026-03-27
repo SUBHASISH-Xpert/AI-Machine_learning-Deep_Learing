@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning — Complete Algorithm Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --ink: #1a1208;
+  --paper: #faf7f2;
+  --ruled: #e8e0d0;
+  --s1: #c0392b; /* Supervised */
+  --s2: #1a6b3c; /* Unsupervised */
+  --s3: #1a3a6b; /* Reinforcement */
+  --s4: #6b1a5c; /* Deep Learning */
+  --s5: #6b4c1a; /* Ensemble */
+  --s6: #2c6b6b; /* Semi-supervised */
+  --accent: #c0392b;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Outfit', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Paper texture overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,.04) 28px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+header {
+  position: relative;
+  z-index: 1;
+  padding: 64px 48px 48px;
+  border-bottom: 3px solid var(--ink);
+  background: var(--paper);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 24px;
+}
+
+.header-left {}
+
+.stamp {
+  font-family: var(--mono);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: 20px;
+  transform: rotate(-1deg);
+}
+
+h1 {
+  font-family: var(--sans);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.0;
+  color: var(--ink);
+  letter-spacing: -.02em;
+}
+
+h1 em {
+  font-style: normal;
+  color: var(--accent);
+  border-bottom: 4px solid var(--accent);
+}
+
+.header-meta {
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: #666;
+  line-height: 2;
+  text-align: right;
+}
+
+.stat-box {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 6px 14px;
+  font-family: var(--mono);
+  font-size: .7rem;
+  margin-top: 8px;
+}
+
+/* ── ROADMAP LEGEND ── */
+.legend {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 20px 48px;
+  background: var(--ink);
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+}
+
+.legend-dot {
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── MAIN ── */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+}
+
+/* ── PHASE BLOCK ── */
+.phase {
+  margin-bottom: 56px;
+}
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.phase-num {
+  font-family: var(--mono);
+  font-size: 2.8rem;
+  font-weight: 700;
+  opacity: .1;
+  line-height: 1;
+}
+
+.phase-title {
+  font-family: var(--sans);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+
+.phase-sub {
+  font-family: var(--mono);
+  font-size: .7rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.phase-count {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+/* ── CATEGORY GRID ── */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+/* ── CATEGORY CARD ── */
+.cat-card {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.cat-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.cat-card-header {
+  padding: 16px 20px 14px;
+  border-bottom: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cat-icon {
+  width: 36px; height: 36px;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.cat-name {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cat-type {
+  font-family: var(--mono);
+  font-size: .6rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .6;
+}
+
+.cat-count {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .65rem;
+  font-weight: 700;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+.algo-list {
+  padding: 14px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.algo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: .88rem;
+}
+
+.algo-bullet {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+
+.algo-name {
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+}
+
+.algo-note {
+  font-family: var(--mono);
+  font-size: .62rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.algo-badge {
+  font-family: var(--mono);
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+  white-space: nowrap;
+  margin-top: 3px;
+}
+
+/* ── ROADMAP FLOW ── */
+.roadmap-flow {
+  position: relative;
+  z-index: 1;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 56px 48px;
+  margin: 0;
+}
+
+.roadmap-flow h2 {
+  font-family: var(--sans);
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.roadmap-flow .sub {
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: rgba(255,255,255,.4);
+  margin-bottom: 40px;
+  letter-spacing: .08em;
+}
+
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0;
+  position: relative;
+}
+
+.flow-step {
+  text-align: center;
+  padding: 0 16px;
+  position: relative;
+}
+
+.flow-step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -10px;
+  top: 28px;
+  font-size: 1.2rem;
+  color: rgba(255,255,255,.3);
+  z-index: 2;
+}
+
+.flow-circle {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 auto 12px;
+  border: 2px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.06);
+}
+
+.flow-label {
+  font-family: var(--sans);
+  font-size: .82rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.flow-desc {
+  font-family: var(--mono);
+  font-size: .6rem;
+  color: rgba(255,255,255,.4);
+  line-height: 1.5;
+}
+
+/* ── TOTAL COUNTER ── */
+.total-bar {
+  position: relative;
+  z-index: 1;
+  background: var(--accent);
+  color: white;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.total-num {
+  font-family: var(--sans);
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+.total-label {
+  font-family: var(--sans);
+  font-size: 1.1rem;
+  font-weight: 600;
+  opacity: .85;
+}
+
+.total-note {
+  font-family: var(--mono);
+  font-size: .68rem;
+  opacity: .65;
+  margin-top: 4px;
+}
+
+.breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.breakdown-item {
+  text-align: center;
+}
+
+.breakdown-num {
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: block;
+}
+
+.breakdown-label {
+  font-family: var(--mono);
+  font-size: .6rem;
+  opacity: .65;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* color themes */
+.t1 { background-color: rgba(192,57,43,.12); border-left: 3px solid var(--s1); }
+.t1 .cat-card-header { background: rgba(192,57,43,.06); }
+.t1 .cat-icon { background: rgba(192,57,43,.15); }
+.t1 .algo-bullet { background: var(--s1); }
+.t1 .cat-count { background: var(--s1); }
+.t1 .algo-badge { background: rgba(192,57,43,.15); color: var(--s1); }
+
+.t2 { background-color: rgba(26,107,60,.08); border-left: 3px solid var(--s2); }
+.t2 .cat-card-header { background: rgba(26,107,60,.06); }
+.t2 .cat-icon { background: rgba(26,107,60,.15); }
+.t2 .algo-bullet { background: var(--s2); }
+.t2 .cat-count { background: var(--s2); }
+.t2 .algo-badge { background: rgba(26,107,60,.15); color: var(--s2); }
+
+.t3 { background-color: rgba(26,58,107,.08); border-left: 3px solid var(--s3); }
+.t3 .cat-card-header { background: rgba(26,58,107,.06); }
+.t3 .cat-icon { background: rgba(26,58,107,.15); }
+.t3 .algo-bullet { background: var(--s3); }
+.t3 .cat-count { background: var(--s3); }
+.t3 .algo-badge { background: rgba(26,58,107,.15); color: var(--s3); }
+
+.t4 { background-color: rgba(107,26,92,.08); border-left: 3px solid var(--s4); }
+.t4 .cat-card-header { background: rgba(107,26,92,.06); }
+.t4 .cat-icon { background: rgba(107,26,92,.15); }
+.t4 .algo-bullet { background: var(--s4); }
+.t4 .cat-count { background: var(--s4); }
+.t4 .algo-badge { background: rgba(107,26,92,.15); color: var(--s4); }
+
+.t5 { background-color: rgba(107,76,26,.08); border-left: 3px solid var(--s5); }
+.t5 .cat-card-header { background: rgba(107,76,26,.06); }
+.t5 .cat-icon { background: rgba(107,76,26,.15); }
+.t5 .algo-bullet { background: var(--s5); }
+.t5 .cat-count { background: var(--s5); }
+.t5 .algo-badge { background: rgba(107,76,26,.15); color: var(--s5); }
+
+.t6 { background-color: rgba(44,107,107,.08); border-left: 3px solid var(--s6); }
+.t6 .cat-card-header { background: rgba(44,107,107,.06); }
+.t6 .cat-icon { background: rgba(44,107,107,.15); }
+.t6 .algo-bullet { background: var(--s6); }
+.t6 .cat-count { background: var(--s6); }
+.t6 .algo-badge { background: rgba(44,107,107,.15); color: var(--s6); }
+
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 32px;
+  border-top: 2px solid var(--ruled);
+  font-family: var(--mono);
+  font-size: .68rem;
+  color: #999;
+  letter-spacing: .08em;
+}
+
+@media (max-width: 640px) {
+  header { grid-template-columns: 1fr; padding: 40px 24px 32px; }
+  .header-meta { text-align: left; }
+  main { padding: 32px 20px 60px; }
+  .legend { padding: 16px 24px; }
+  .roadmap-flow { padding: 40px 24px; }
+  .total-bar { padding: 24px; }
+  .breakdown { margin-left: 0; }
+  .flow-steps { grid-template-columns: 1fr; gap: 24px; }
+  .flow-step:not(:last-child)::after { content: '↓'; right: 50%; top: auto; bottom: -20px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="stamp">// Complete Roadmap 2024</div>
+    <h1>Machine <em>Learning</em><br>Algorithms</h1>
+  </div>
+  <div class="header-meta">
+    <div>Categories · 8</div>
+    <div>Algorithms · 50+</div>
+    <div>Paradigms · 4</div>
+    <div class="stat-box">From Beginner → Expert</div>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div>Supervised</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1a6b3c"></div>Unsupervised</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1a3a6b"></div>Reinforcement</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#6b1a5c"></div>Deep Learning</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#6b4c1a"></div>Ensemble</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2c6b6b"></div>Semi-Supervised</div>
+</div>
+
+<div class="total-bar">
+  <div>
+    <div class="total-num">50+</div>
+    <div class="total-label">Total ML Algorithms</div>
+    <div class="total-note">Covering all major paradigms & sub-fields</div>
+  </div>
+  <div class="breakdown">
+    <div class="breakdown-item"><span class="breakdown-num">18</span><span class="breakdown-label">Supervised</span></div>
+    <div class="breakdown-item"><span class="breakdown-num">10</span><span class="breakdown-label">Unsupervised</span></div>
+    <div class="breakdown-item"><span class="breakdown-num">7</span><span class="breakdown-label">Ensemble</span></div>
+    <div class="breakdown-item"><span class="breakdown-num">10</span><span class="breakdown-label">Deep Learning</span></div>
+    <div class="breakdown-item"><span class="breakdown-num">5+</span><span class="breakdown-label">Other</span></div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══ PHASE 1: SUPERVISED ══ -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">01</span>
+    <div>
+      <div class="phase-title">Supervised Learning</div>
+      <div class="phase-sub">Learns from labeled data — input → output pairs</div>
+    </div>
+    <span class="phase-count" style="background:var(--s1)">18 algorithms</span>
+  </div>
+
+  <div class="cat-grid">
+    <!-- Regression -->
+    <div class="cat-card t1">
+      <div class="cat-card-header">
+        <div class="cat-icon">📈</div>
+        <div>
+          <div class="cat-name">Regression</div>
+          <div class="cat-type">Predicts continuous values</div>
+        </div>
+        <span class="cat-count">6</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Linear Regression</div><div class="algo-note">Predict numbers with a straight line</div></div><span class="algo-badge t1">Beginner</span></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Polynomial Regression</div><div class="algo-note">Curved relationship between variables</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Ridge Regression (L2)</div><div class="algo-note">Linear with regularization to prevent overfit</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Lasso Regression (L1)</div><div class="algo-note">Feature selection via sparsity</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">ElasticNet</div><div class="algo-note">Mix of Ridge + Lasso</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">SVR (Support Vector Regression)</div><div class="algo-note">SVM applied to regression</div></div></div>
+      </div>
+    </div>
+
+    <!-- Classification -->
+    <div class="cat-card t1">
+      <div class="cat-card-header">
+        <div class="cat-icon">🏷️</div>
+        <div>
+          <div class="cat-name">Classification</div>
+          <div class="cat-type">Predicts a category or class label</div>
+        </div>
+        <span class="cat-count">12</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Logistic Regression</div><div class="algo-note">Binary/multiclass probability output</div></div><span class="algo-badge t1">Beginner</span></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Decision Tree</div><div class="algo-note">If-else rules, highly interpretable</div></div><span class="algo-badge t1">Beginner</span></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">K-Nearest Neighbors (KNN)</div><div class="algo-note">Classify by similar neighbors</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Naive Bayes</div><div class="algo-note">Probabilistic, great for text/NLP</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Support Vector Machine (SVM)</div><div class="algo-note">Maximum margin hyperplane classifier</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Linear Discriminant Analysis</div><div class="algo-note">Dimensionality reduction + classification</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Quadratic Discriminant Analysis</div><div class="algo-note">Non-linear version of LDA</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Perceptron</div><div class="algo-note">Simplest neural unit, binary classes</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Stochastic Gradient Descent</div><div class="algo-note">Optimization method for linear models</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Gaussian Process Classifier</div><div class="algo-note">Bayesian probabilistic approach</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Neural Network (MLP)</div><div class="algo-note">Multi-layer perceptron — classic shallow NN</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t1"></div><div><div class="algo-name">Bayesian Network</div><div class="algo-note">Probabilistic graphical model</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PHASE 2: ENSEMBLE ══ -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">02</span>
+    <div>
+      <div class="phase-title">Ensemble Methods</div>
+      <div class="phase-sub">Combine multiple models for superior accuracy</div>
+    </div>
+    <span class="phase-count" style="background:var(--s5)">7 algorithms</span>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card t5">
+      <div class="cat-card-header">
+        <div class="cat-icon">🌲</div>
+        <div>
+          <div class="cat-name">Bagging Methods</div>
+          <div class="cat-type">Train many models in parallel, then vote</div>
+        </div>
+        <span class="cat-count">2</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t5"></div><div><div class="algo-name">Random Forest</div><div class="algo-note">100s of decision trees, majority vote</div></div><span class="algo-badge t5">★ Most Used</span></div>
+        <div class="algo-item"><div class="algo-bullet t5"></div><div><div class="algo-name">Bagging Classifier</div><div class="algo-note">Bootstrap aggregating on any base model</div></div></div>
+      </div>
+    </div>
+
+    <div class="cat-card t5">
+      <div class="cat-card-header">
+        <div class="cat-icon">🚀</div>
+        <div>
+          <div class="cat-name">Boosting Methods</div>
+          <div class="cat-type">Train models sequentially, fix errors</div>
+        </div>
+        <span class="cat-count">5</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t5"></div><div><div class="algo-name">AdaBoost</div><div class="algo-note">Adaptive boosting — weights hard examples</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t5"></div><div><div class="algo-name">Gradient Boosting (GBM)</div><div class="algo-note">Builds trees on residual errors</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t5"></div><div><div class="algo-name">XGBoost</div><div class="algo-note">Optimized GBM, wins Kaggle competitions</div></div><span class="algo-badge t5">★ Industry</span></div>
+        <div class="algo-item"><div class="algo-bullet t5"></div><div><div class="algo-name">LightGBM</div><div class="algo-note">Faster GBM with leaf-wise growth</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t5"></div><div><div class="algo-name">CatBoost</div><div class="algo-note">Best for categorical feature-heavy data</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PHASE 3: UNSUPERVISED ══ -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">03</span>
+    <div>
+      <div class="phase-title">Unsupervised Learning</div>
+      <div class="phase-sub">Finds hidden patterns in unlabeled data</div>
+    </div>
+    <span class="phase-count" style="background:var(--s2)">10 algorithms</span>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card t2">
+      <div class="cat-card-header">
+        <div class="cat-icon">🔵</div>
+        <div>
+          <div class="cat-name">Clustering</div>
+          <div class="cat-type">Groups similar data points together</div>
+        </div>
+        <span class="cat-count">6</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">K-Means Clustering</div><div class="algo-note">Partition into K spherical clusters</div></div><span class="algo-badge t2">Beginner</span></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">DBSCAN</div><div class="algo-note">Density-based, finds arbitrary shapes</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">Hierarchical Clustering</div><div class="algo-note">Builds a tree of cluster merges (dendrogram)</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">Gaussian Mixture Models</div><div class="algo-note">Probabilistic soft cluster assignments</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">Mean Shift</div><div class="algo-note">Finds modes of density distribution</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">OPTICS</div><div class="algo-note">Extension of DBSCAN for varying density</div></div></div>
+      </div>
+    </div>
+
+    <div class="cat-card t2">
+      <div class="cat-card-header">
+        <div class="cat-icon">🔻</div>
+        <div>
+          <div class="cat-name">Dimensionality Reduction</div>
+          <div class="cat-type">Compress features, keep structure</div>
+        </div>
+        <span class="cat-count">4</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">PCA (Principal Component Analysis)</div><div class="algo-note">Linear projection to top variance axes</div></div><span class="algo-badge t2">★ Most Used</span></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">t-SNE</div><div class="algo-note">Non-linear 2D/3D visualization</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">UMAP</div><div class="algo-note">Faster t-SNE alternative, preserves global structure</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t2"></div><div><div class="algo-name">Autoencoders</div><div class="algo-note">Neural network compression & reconstruction</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PHASE 4: DEEP LEARNING ══ -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">04</span>
+    <div>
+      <div class="phase-title">Deep Learning</div>
+      <div class="phase-sub">Neural networks with many layers — for complex patterns</div>
+    </div>
+    <span class="phase-count" style="background:var(--s4)">10 architectures</span>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card t4">
+      <div class="cat-card-header">
+        <div class="cat-icon">🧠</div>
+        <div>
+          <div class="cat-name">Core Architectures</div>
+          <div class="cat-type">Foundational neural network types</div>
+        </div>
+        <span class="cat-count">5</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Artificial Neural Network (ANN)</div><div class="algo-note">Foundation of all deep learning</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Convolutional Neural Network (CNN)</div><div class="algo-note">Images, video, spatial data</div></div><span class="algo-badge t4">★ Vision</span></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Recurrent Neural Network (RNN)</div><div class="algo-note">Sequential / time-series data</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">LSTM (Long Short-Term Memory)</div><div class="algo-note">Better memory than vanilla RNN</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">GRU (Gated Recurrent Unit)</div><div class="algo-note">Lighter, faster LSTM variant</div></div></div>
+      </div>
+    </div>
+
+    <div class="cat-card t4">
+      <div class="cat-card-header">
+        <div class="cat-icon">⚡</div>
+        <div>
+          <div class="cat-name">Modern Architectures</div>
+          <div class="cat-type">State-of-the-art neural networks</div>
+        </div>
+        <span class="cat-count">5</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Transformer</div><div class="algo-note">Self-attention — powers GPT, BERT, LLMs</div></div><span class="algo-badge t4">★ 2024</span></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Generative Adversarial Network (GAN)</div><div class="algo-note">Generator vs Discriminator — creates images</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Variational Autoencoder (VAE)</div><div class="algo-note">Generative latent space learning</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Diffusion Models</div><div class="algo-note">Image generation (Stable Diffusion, DALL·E)</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t4"></div><div><div class="algo-name">Graph Neural Network (GNN)</div><div class="algo-note">For graph-structured data, molecules, social nets</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PHASE 5: RL + SEMI ══ -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">05</span>
+    <div>
+      <div class="phase-title">Reinforcement & Semi-Supervised</div>
+      <div class="phase-sub">Learning through rewards and limited labels</div>
+    </div>
+    <span class="phase-count" style="background:var(--s3)">8 methods</span>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card t3">
+      <div class="cat-card-header">
+        <div class="cat-icon">🎮</div>
+        <div>
+          <div class="cat-name">Reinforcement Learning</div>
+          <div class="cat-type">Agent learns by trial, error, and reward</div>
+        </div>
+        <span class="cat-count">5</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t3"></div><div><div class="algo-name">Q-Learning</div><div class="algo-note">Learn value of actions in each state</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t3"></div><div><div class="algo-name">Deep Q-Network (DQN)</div><div class="algo-note">Q-Learning with deep neural network</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t3"></div><div><div class="algo-name">Policy Gradient (REINFORCE)</div><div class="algo-note">Directly optimize action policy</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t3"></div><div><div class="algo-name">Actor-Critic (A3C, A2C)</div><div class="algo-note">Policy + value function combination</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t3"></div><div><div class="algo-name">Proximal Policy Optimization (PPO)</div><div class="algo-note">Stable, efficient policy training — powers ChatGPT RLHF</div></div><span class="algo-badge t3">★ 2024</span></div>
+      </div>
+    </div>
+
+    <div class="cat-card t6">
+      <div class="cat-card-header">
+        <div class="cat-icon">🔬</div>
+        <div>
+          <div class="cat-name">Semi-Supervised & Other</div>
+          <div class="cat-type">Combines labeled + unlabeled data</div>
+        </div>
+        <span class="cat-count">3</span>
+      </div>
+      <div class="algo-list">
+        <div class="algo-item"><div class="algo-bullet t6"></div><div><div class="algo-name">Self-Training</div><div class="algo-note">Model labels its own unlabeled data iteratively</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t6"></div><div><div class="algo-name">Label Propagation</div><div class="algo-note">Spreads labels through graph of similar points</div></div></div>
+        <div class="algo-item"><div class="algo-bullet t6"></div><div><div class="algo-name">Anomaly Detection (Isolation Forest)</div><div class="algo-note">Detect outliers and unusual patterns</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ══ LEARNING ROADMAP FLOW ══ -->
+<div class="roadmap-flow">
+  <h2>Learning Roadmap</h2>
+  <p class="sub">// Recommended order to study ML algorithms from beginner to expert</p>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-circle" style="border-color:#c0392b; color:#c0392b">📐</div>
+      <div class="flow-label">Step 1 · Foundation</div>
+      <div class="flow-desc">Math: Linear Algebra, Statistics, Calculus, Probability</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-circle" style="border-color:#e67e22; color:#e67e22">📈</div>
+      <div class="flow-label">Step 2 · Classic ML</div>
+      <div class="flow-desc">Linear & Logistic Regression, Decision Trees, KNN, Naive Bayes</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-circle" style="border-color:#f1c40f; color:#f1c40f">🌲</div>
+      <div class="flow-label">Step 3 · Ensemble</div>
+      <div class="flow-desc">Random Forest, XGBoost, LightGBM, Bagging, Boosting</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-circle" style="border-color:#2ecc71; color:#2ecc71">🔵</div>
+      <div class="flow-label">Step 4 · Unsupervised</div>
+      <div class="flow-desc">K-Means, DBSCAN, PCA, t-SNE, Autoencoders</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-circle" style="border-color:#3498db; color:#3498db">🧠</div>
+      <div class="flow-label">Step 5 · Deep Learning</div>
+      <div class="flow-desc">ANN → CNN → RNN/LSTM → Transformers → GANs</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-circle" style="border-color:#9b59b6; color:#9b59b6">🎮</div>
+      <div class="flow-label">Step 6 · Advanced</div>
+      <div class="flow-desc">Reinforcement Learning, Diffusion Models, LLMs, GNNs</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Machine Learning Complete Algorithm Roadmap · 50+ Algorithms · 6 Paradigms · Beginner → Expert
+</footer>
+
+</body>
+</html>
