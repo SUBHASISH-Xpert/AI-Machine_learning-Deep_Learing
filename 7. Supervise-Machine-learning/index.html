@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supervised Learning Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --border: #1e2d45;
+    --accent1: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --accent4: #10b981;
+    --accent5: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow1: rgba(0,212,255,0.15);
+    --glow2: rgba(124,58,237,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 20s ease-in-out infinite alternate;
+  }
+  .orb1 { width: 400px; height: 400px; background: var(--glow1); top: -100px; left: -100px; animation-delay: 0s; }
+  .orb2 { width: 300px; height: 300px; background: var(--glow2); bottom: 100px; right: -50px; animation-delay: -8s; }
+  .orb3 { width: 250px; height: 250px; background: rgba(245,158,11,0.08); top: 50%; left: 50%; animation-delay: -4s; }
+
+  @keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, 30px) scale(1.1); }
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    padding: 60px 0 40px;
+    text-align: center;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    padding: 5px 16px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, var(--accent1) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 1px;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* WHAT IS SUPERVISED LEARNING */
+  .intro-card {
+    background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(124,58,237,0.05));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: center;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .intro-icon {
+    font-size: 48px;
+    line-height: 1;
+  }
+
+  .intro-card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    color: var(--accent1);
+    margin-bottom: 8px;
+  }
+
+  .intro-card p {
+    color: #94a3b8;
+    font-size: 12.5px;
+    line-height: 1.9;
+  }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 48px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ALGORITHM CARDS GRID */
+  .algo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .algo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    animation: fadeUp 0.6s ease both;
+    cursor: default;
+  }
+
+  .algo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--accent1));
+  }
+
+  .algo-card::after {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: var(--card-glow, var(--glow1));
+    transition: transform 0.3s;
+  }
+
+  .algo-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--card-accent, var(--accent1));
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--card-accent, var(--accent1));
+  }
+
+  .algo-card:hover::after {
+    transform: scale(1.5);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+
+  .card-icon {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+
+  .card-type {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--accent1));
+    font-weight: 500;
+  }
+
+  .card-desc {
+    font-size: 11.5px;
+    color: #94a3b8;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .use-cases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--card-accent, var(--accent1));
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .complexity {
+    position: absolute;
+    top: 0; right: 0;
+    background: rgba(0,0,0,0.4);
+    border-radius: 0 14px 0 10px;
+    padding: 4px 10px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+
+  /* ROADMAP TIMELINE */
+  .roadmap {
+    position: relative;
+    padding-left: 32px;
+    margin-top: 12px;
+  }
+
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4));
+  }
+
+  .roadmap-step {
+    position: relative;
+    margin-bottom: 28px;
+    animation: fadeLeft 0.6s ease both;
+  }
+
+  .roadmap-step::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 14px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--step-color, var(--accent1));
+    box-shadow: 0 0 12px var(--step-color, var(--accent1));
+    border: 2px solid var(--bg);
+  }
+
+  .step-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--step-color, var(--accent1));
+    border-radius: 0 12px 12px 0;
+    padding: 18px 20px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .step-box:hover {
+    box-shadow: -4px 0 20px rgba(0,212,255,0.1);
+  }
+
+  .step-num {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--step-color, var(--accent1));
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 11.5px;
+    color: #94a3b8;
+    line-height: 1.8;
+  }
+
+  .step-items {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .step-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: #94a3b8;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    animation: fadeUp 0.6s ease both;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+
+  thead {
+    background: rgba(0,212,255,0.05);
+  }
+
+  th {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(30,45,69,0.5);
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td {
+    background: rgba(255,255,255,0.02);
+    color: var(--text);
+  }
+
+  .dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* KEY CONCEPTS */
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .concept-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    animation: fadeUp 0.5s ease both;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .concept-pill:hover {
+    border-color: var(--accent1);
+    transform: scale(1.02);
+  }
+
+  .concept-pill .ci { font-size: 26px; margin-bottom: 8px; }
+  .concept-pill .ct {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .concept-pill .cd { font-size: 10px; color: var(--muted); line-height: 1.5; }
+
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp   { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+  /* Stagger delays */
+  .algo-card:nth-child(1) { animation-delay: 0.1s; }
+  .algo-card:nth-child(2) { animation-delay: 0.15s; }
+  .algo-card:nth-child(3) { animation-delay: 0.2s; }
+  .algo-card:nth-child(4) { animation-delay: 0.25s; }
+  .algo-card:nth-child(5) { animation-delay: 0.3s; }
+  .algo-card:nth-child(6) { animation-delay: 0.35s; }
+  .algo-card:nth-child(7) { animation-delay: 0.4s; }
+  .algo-card:nth-child(8) { animation-delay: 0.45s; }
+  .roadmap-step:nth-child(1) { animation-delay: 0.1s; }
+  .roadmap-step:nth-child(2) { animation-delay: 0.2s; }
+  .roadmap-step:nth-child(3) { animation-delay: 0.3s; }
+  .roadmap-step:nth-child(4) { animation-delay: 0.4s; }
+  .roadmap-step:nth-child(5) { animation-delay: 0.5s; }
+  .roadmap-step:nth-child(6) { animation-delay: 0.6s; }
+  .concept-pill:nth-child(1) { animation-delay: 0.05s; }
+  .concept-pill:nth-child(2) { animation-delay: 0.1s; }
+  .concept-pill:nth-child(3) { animation-delay: 0.15s; }
+  .concept-pill:nth-child(4) { animation-delay: 0.2s; }
+  .concept-pill:nth-child(5) { animation-delay: 0.25s; }
+  .concept-pill:nth-child(6) { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="badge">Machine Learning</div>
+    <h1>Supervised Learning<br>Algorithms & Roadmap</h1>
+    <p class="subtitle">A complete guide to algorithms, use cases, and the learning path to master supervised ML</p>
+  </header>
+
+  <!-- WHAT IS IT -->
+  <div class="intro-card">
+    <div class="intro-icon">🎓</div>
+    <div>
+      <h2>What is Supervised Learning?</h2>
+      <p>Supervised learning trains a model on <strong style="color:#e2e8f0">labeled data</strong> — pairs of input (X) and output (Y) — so it can learn a mapping function f(X) = Y. The algorithm learns from examples and generalizes to unseen data. It's called "supervised" because the training process is guided by correct answers.</p>
+    </div>
+  </div>
+
+  <!-- KEY CONCEPTS -->
+  <div class="section-title">Core Concepts</div>
+  <div class="concepts-grid">
+    <div class="concept-pill">
+      <div class="ci">📊</div>
+      <div class="ct">Training Data</div>
+      <div class="cd">Labeled (X, Y) pairs used to fit the model</div>
+    </div>
+    <div class="concept-pill">
+      <div class="ci">🎯</div>
+      <div class="ct">Loss Function</div>
+      <div class="cd">Measures how far predictions are from truth</div>
+    </div>
+    <div class="concept-pill">
+      <div class="ci">⚙️</div>
+      <div class="ct">Optimization</div>
+      <div class="cd">Gradient descent minimizes the loss</div>
+    </div>
+    <div class="concept-pill">
+      <div class="ci">🔁</div>
+      <div class="ct">Overfitting</div>
+      <div class="cd">Model memorizes data, fails on new inputs</div>
+    </div>
+    <div class="concept-pill">
+      <div class="ci">📐</div>
+      <div class="ct">Bias–Variance</div>
+      <div class="cd">Tradeoff between simplicity and flexibility</div>
+    </div>
+    <div class="concept-pill">
+      <div class="ci">✅</div>
+      <div class="ct">Cross-Validation</div>
+      <div class="cd">Evaluate generalization on held-out folds</div>
+    </div>
+  </div>
+
+  <!-- ALGORITHMS -->
+  <div class="section-title">Algorithms</div>
+  <div class="algo-grid">
+
+    <!-- Linear Regression -->
+    <div class="algo-card" style="--card-accent:#00d4ff; --card-glow:rgba(0,212,255,0.12);">
+      <div class="complexity">LOW COMPLEXITY</div>
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+        <div>
+          <div class="card-title">Linear Regression</div>
+          <div class="card-type">Regression</div>
+        </div>
+      </div>
+      <p class="card-desc">Fits a straight line (or hyperplane) to predict a continuous output. Minimizes sum of squared residuals. Assumes linear relationship between features and target.</p>
+      <div class="use-cases">
+        <span class="tag">House Prices</span>
+        <span class="tag">Sales Forecasting</span>
+        <span class="tag">Temperature Prediction</span>
+        <span class="tag">Stock Trends</span>
+      </div>
+    </div>
+
+    <!-- Logistic Regression -->
+    <div class="algo-card" style="--card-accent:#7c3aed; --card-glow:rgba(124,58,237,0.12);">
+      <div class="complexity">LOW COMPLEXITY</div>
+      <div class="card-header">
+        <div class="card-icon">🔵</div>
+        <div>
+          <div class="card-title">Logistic Regression</div>
+          <div class="card-type">Classification</div>
+        </div>
+      </div>
+      <p class="card-desc">Uses sigmoid function to output probabilities for binary (or multi-class) classification. Interpretable and efficient. Despite the name, it's a classification algorithm.</p>
+      <div class="use-cases">
+        <span class="tag">Spam Detection</span>
+        <span class="tag">Disease Diagnosis</span>
+        <span class="tag">Credit Scoring</span>
+        <span class="tag">Churn Prediction</span>
+      </div>
+    </div>
+
+    <!-- Decision Tree -->
+    <div class="algo-card" style="--card-accent:#f59e0b; --card-glow:rgba(245,158,11,0.12);">
+      <div class="complexity">MEDIUM</div>
+      <div class="card-header">
+        <div class="card-icon">🌳</div>
+        <div>
+          <div class="card-title">Decision Tree</div>
+          <div class="card-type">Classification & Regression</div>
+        </div>
+      </div>
+      <p class="card-desc">Recursively splits data by features using Gini/Entropy criteria. Highly interpretable — you can visualize decision paths. Prone to overfitting without pruning.</p>
+      <div class="use-cases">
+        <span class="tag">Customer Segmentation</span>
+        <span class="tag">Medical Diagnosis</span>
+        <span class="tag">Loan Approval</span>
+        <span class="tag">Fraud Detection</span>
+      </div>
+    </div>
+
+    <!-- Random Forest -->
+    <div class="algo-card" style="--card-accent:#10b981; --card-glow:rgba(16,185,129,0.12);">
+      <div class="complexity">MEDIUM–HIGH</div>
+      <div class="card-header">
+        <div class="card-icon">🌲</div>
+        <div>
+          <div class="card-title">Random Forest</div>
+          <div class="card-type">Ensemble | Classification & Regression</div>
+        </div>
+      </div>
+      <p class="card-desc">Bagging ensemble of decision trees. Each tree is trained on a random subset of data and features. Averages predictions for robustness. Reduces variance significantly.</p>
+      <div class="use-cases">
+        <span class="tag">Feature Selection</span>
+        <span class="tag">Healthcare</span>
+        <span class="tag">E-commerce</span>
+        <span class="tag">Remote Sensing</span>
+      </div>
+    </div>
+
+    <!-- SVM -->
+    <div class="algo-card" style="--card-accent:#ef4444; --card-glow:rgba(239,68,68,0.12);">
+      <div class="complexity">MEDIUM–HIGH</div>
+      <div class="card-header">
+        <div class="card-icon">⚔️</div>
+        <div>
+          <div class="card-title">Support Vector Machine</div>
+          <div class="card-type">Classification & Regression</div>
+        </div>
+      </div>
+      <p class="card-desc">Finds optimal hyperplane that maximizes margin between classes. Kernel trick projects data to higher dimensions. Works well in high-dimensional spaces with small datasets.</p>
+      <div class="use-cases">
+        <span class="tag">Image Classification</span>
+        <span class="tag">Text Classification</span>
+        <span class="tag">Bioinformatics</span>
+        <span class="tag">Face Detection</span>
+      </div>
+    </div>
+
+    <!-- KNN -->
+    <div class="algo-card" style="--card-accent:#06b6d4; --card-glow:rgba(6,182,212,0.12);">
+      <div class="complexity">LOW (LAZY)</div>
+      <div class="card-header">
+        <div class="card-icon">📍</div>
+        <div>
+          <div class="card-title">K-Nearest Neighbors</div>
+          <div class="card-type">Classification & Regression</div>
+        </div>
+      </div>
+      <p class="card-desc">Non-parametric algorithm that classifies based on the K closest training samples. No model training phase (lazy learner). Sensitive to feature scaling and high dimensions.</p>
+      <div class="use-cases">
+        <span class="tag">Recommendation Systems</span>
+        <span class="tag">Image Recognition</span>
+        <span class="tag">Anomaly Detection</span>
+      </div>
+    </div>
+
+    <!-- Gradient Boosting -->
+    <div class="algo-card" style="--card-accent:#f97316; --card-glow:rgba(249,115,22,0.12);">
+      <div class="complexity">HIGH</div>
+      <div class="card-header">
+        <div class="card-icon">🚀</div>
+        <div>
+          <div class="card-title">Gradient Boosting (XGBoost)</div>
+          <div class="card-type">Ensemble | Classification & Regression</div>
+        </div>
+      </div>
+      <p class="card-desc">Sequentially builds trees where each corrects errors of the previous. Uses gradient descent in function space. Dominant in Kaggle competitions. Handles missing data natively.</p>
+      <div class="use-cases">
+        <span class="tag">Kaggle Competitions</span>
+        <span class="tag">Finance</span>
+        <span class="tag">Click-Through Rate</span>
+        <span class="tag">Ranking</span>
+      </div>
+    </div>
+
+    <!-- Neural Networks -->
+    <div class="algo-card" style="--card-accent:#a855f7; --card-glow:rgba(168,85,247,0.12);">
+      <div class="complexity">VERY HIGH</div>
+      <div class="card-header">
+        <div class="card-icon">🧠</div>
+        <div>
+          <div class="card-title">Neural Networks / Deep Learning</div>
+          <div class="card-type">Classification & Regression</div>
+        </div>
+      </div>
+      <p class="card-desc">Stacked layers of neurons with nonlinear activations. Can learn arbitrary complex patterns from large data. Variants: CNN (images), RNN/LSTM (sequences), Transformers (NLP).</p>
+      <div class="use-cases">
+        <span class="tag">Computer Vision</span>
+        <span class="tag">NLP / LLMs</span>
+        <span class="tag">Speech Recognition</span>
+        <span class="tag">Drug Discovery</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="section-title">Algorithm Comparison</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Algorithm</th>
+          <th>Type</th>
+          <th>Interpretability</th>
+          <th>Training Speed</th>
+          <th>Large Data</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dot" style="background:#00d4ff"></span>Linear Regression</td>
+          <td>Regression</td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>⚡⚡⚡⚡⚡</td>
+          <td>✅</td>
+          <td>Continuous output, linear data</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#7c3aed"></span>Logistic Regression</td>
+          <td>Classification</td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>⚡⚡⚡⚡⚡</td>
+          <td>✅</td>
+          <td>Binary/multi-class, baseline</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#f59e0b"></span>Decision Tree</td>
+          <td>Both</td>
+          <td>⭐⭐⭐⭐</td>
+          <td>⚡⚡⚡⚡</td>
+          <td>⚠️</td>
+          <td>Tabular, explainability needed</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#10b981"></span>Random Forest</td>
+          <td>Both</td>
+          <td>⭐⭐</td>
+          <td>⚡⚡⚡</td>
+          <td>✅</td>
+          <td>General purpose, robust</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#ef4444"></span>SVM</td>
+          <td>Both</td>
+          <td>⭐⭐</td>
+          <td>⚡⚡</td>
+          <td>❌</td>
+          <td>High-dim, small dataset</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#06b6d4"></span>KNN</td>
+          <td>Both</td>
+          <td>⭐⭐⭐</td>
+          <td>⚡⚡⚡⚡⚡</td>
+          <td>❌</td>
+          <td>Simple, no training needed</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#f97316"></span>XGBoost</td>
+          <td>Both</td>
+          <td>⭐⭐</td>
+          <td>⚡⚡</td>
+          <td>✅</td>
+          <td>Tabular SOTA, competitions</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#a855f7"></span>Neural Network</td>
+          <td>Both</td>
+          <td>⭐</td>
+          <td>⚡</td>
+          <td>✅✅</td>
+          <td>Images, text, audio, unstructured</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LEARNING ROADMAP -->
+  <div class="section-title">Learning Roadmap</div>
+  <div class="roadmap">
+
+    <div class="roadmap-step" style="--step-color:#00d4ff">
+      <div class="step-box">
+        <div class="step-num">Step 01 · Foundation</div>
+        <div class="step-title">Math & Statistics Prerequisites</div>
+        <p class="step-desc">Build the mathematical foundation before jumping into algorithms. This is the bedrock everything else rests on.</p>
+        <div class="step-items">
+          <span class="step-item">Linear Algebra (vectors, matrices)</span>
+          <span class="step-item">Calculus (derivatives, chain rule)</span>
+          <span class="step-item">Probability & Bayes Theorem</span>
+          <span class="step-item">Statistics (mean, variance, distributions)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap-step" style="--step-color:#7c3aed">
+      <div class="step-box">
+        <div class="step-num">Step 02 · Programming</div>
+        <div class="step-title">Python & Data Libraries</div>
+        <p class="step-desc">Python is the lingua franca of ML. Master the core libraries used in every real-world project.</p>
+        <div class="step-items">
+          <span class="step-item">Python (functions, OOP)</span>
+          <span class="step-item">NumPy & Pandas</span>
+          <span class="step-item">Matplotlib & Seaborn</span>
+          <span class="step-item">Jupyter Notebooks</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap-step" style="--step-color:#f59e0b">
+      <div class="step-box">
+        <div class="step-num">Step 03 · Core ML</div>
+        <div class="step-title">Supervised Learning Fundamentals</div>
+        <p class="step-desc">Study algorithms from the ground up — understand how and WHY each one works, not just the scikit-learn API.</p>
+        <div class="step-items">
+          <span class="step-item">Linear & Logistic Regression</span>
+          <span class="step-item">Decision Trees & Random Forests</span>
+          <span class="step-item">SVM & KNN</span>
+          <span class="step-item">Scikit-learn Pipelines</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap-step" style="--step-color:#10b981">
+      <div class="step-box">
+        <div class="step-num">Step 04 · Model Engineering</div>
+        <div class="step-title">Evaluation, Tuning & Preprocessing</div>
+        <p class="step-desc">Knowing the algorithm is 40% of the job. The rest is data prep, validation, and tuning to production quality.</p>
+        <div class="step-items">
+          <span class="step-item">Train/Val/Test splits</span>
+          <span class="step-item">Cross-validation</span>
+          <span class="step-item">Hyperparameter tuning (GridSearch, Optuna)</span>
+          <span class="step-item">Feature engineering & scaling</span>
+          <span class="step-item">Confusion matrix, ROC-AUC, RMSE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap-step" style="--step-color:#f97316">
+      <div class="step-box">
+        <div class="step-num">Step 05 · Advanced</div>
+        <div class="step-title">Ensemble Methods & Deep Learning</div>
+        <p class="step-desc">Graduate to the algorithms that dominate real benchmarks. Learn when deep learning is (and isn't) needed.</p>
+        <div class="step-items">
+          <span class="step-item">XGBoost / LightGBM / CatBoost</span>
+          <span class="step-item">Neural Networks with PyTorch / TensorFlow</span>
+          <span class="step-item">CNN for images</span>
+          <span class="step-item">Transformers for NLP</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap-step" style="--step-color:#a855f7">
+      <div class="step-box">
+        <div class="step-num">Step 06 · Production</div>
+        <div class="step-title">MLOps & Deployment</div>
+        <p class="step-desc">Ship your models to the real world. Learn how to serve, monitor, and maintain ML systems at scale.</p>
+        <div class="step-items">
+          <span class="step-item">Model serialization (pickle, ONNX)</span>
+          <span class="step-item">REST APIs with FastAPI / Flask</span>
+          <span class="step-item">Docker & Cloud (AWS, GCP, Azure)</span>
+          <span class="step-item">MLflow / Weights & Biases</span>
+          <span class="step-item">Data drift & model monitoring</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
